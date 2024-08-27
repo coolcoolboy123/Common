@@ -1,15 +1,15 @@
-package com.sangeng.handler.exception;
+package com.example.demo.handle;
 
-import com.sangeng.domain.ResponseResult;
-import com.sangeng.enums.AppHttpCodeEnum;
-import com.sangeng.exception.SystemException;
+import com.example.demo.domain.ResponseResult;
+import com.example.demo.enums.AppHttpCodeEnum;
+import com.example.demo.exception.SystemException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
+ * 全局异常处理器
  * @author ljy
- * @date 2023/2/5
  */
 @RestControllerAdvice
 @Slf4j

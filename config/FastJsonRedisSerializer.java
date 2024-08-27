@@ -1,63 +1,42 @@
-package com.sangeng.config;
+package com.example.demo.config;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONWriter;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
-import com.alibaba.fastjson.parser.ParserConfig;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Redis使用FastJson序列化
- * 
+ * Redis使用FastJson2序列化
+ *
  * @author summer
  */
-public class FastJsonRedisSerializer<T> implements RedisSerializer<T>
-{
+public class FastJsonRedisSerializer<T> implements RedisSerializer<T> {
 
     public static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
-    private Class<T> clazz;
+    private final Class<T> clazz;
 
-    static
-    {
-        ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
-    }
-
-    public FastJsonRedisSerializer(Class<T> clazz)
-    {
+    public FastJsonRedisSerializer(Class<T> clazz) {
         super();
         this.clazz = clazz;
     }
 
     @Override
-    public byte[] serialize(T t) throws SerializationException
-    {
-        if (t == null)
-        {
+    public byte[] serialize(T t) throws SerializationException {
+        if (t == null) {
             return new byte[0];
         }
-        return JSON.toJSONString(t, SerializerFeature.WriteClassName).getBytes(DEFAULT_CHARSET);
+        return JSON.toJSONString(t, JSONWriter.Feature.WriteClassName).getBytes(DEFAULT_CHARSET);
     }
 
     @Override
-    public T deserialize(byte[] bytes) throws SerializationException
-    {
-        if (bytes == null || bytes.length <= 0)
-        {
+    public T deserialize(byte[] bytes) throws SerializationException {
+        if (bytes == null || bytes.length <= 0) {
             return null;
         }
         String str = new String(bytes, DEFAULT_CHARSET);
-
         return JSON.parseObject(str, clazz);
-    }
-
-
-    protected JavaType getJavaType(Class<?> clazz)
-    {
-        return TypeFactory.defaultInstance().constructType(clazz);
     }
 }

@@ -1,10 +1,16 @@
-package com.sangeng.domain;
+package com.example.demo.domain;
 
+import com.example.demo.enums.AppHttpCodeEnum;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.sangeng.enums.AppHttpCodeEnum;
+import lombok.Getter;
 
 import java.io.Serializable;
 
+/**
+ * 统一返回结果类
+ * @author ljy
+ */
+@Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseResult<T> implements Serializable {
     private Integer code;
@@ -37,8 +43,7 @@ public class ResponseResult<T> implements Serializable {
         return result.error(code, msg);
     }
     public static ResponseResult okResult() {
-        ResponseResult result = new ResponseResult();
-        return result;
+        return new ResponseResult();
     }
     public static ResponseResult okResult(int code, String msg) {
         ResponseResult result = new ResponseResult();
@@ -93,24 +98,12 @@ public class ResponseResult<T> implements Serializable {
         return this;
     }
 
-    public Integer getCode() {
-        return code;
-    }
-
     public void setCode(Integer code) {
         this.code = code;
     }
 
-    public String getMsg() {
-        return msg;
-    }
-
     public void setMsg(String msg) {
         this.msg = msg;
-    }
-
-    public T getData() {
-        return data;
     }
 
     public void setData(T data) {

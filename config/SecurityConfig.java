@@ -1,69 +1,40 @@
-package com.sangeng.config;
+package com.example.demo.config;
 
-import com.sangeng.filter.JwtAuthenticationTokenFilter;
-import com.sangeng.handler.AccessDeniedHandlerImpl;
-import com.sangeng.handler.AuthenticationEntryPointImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import javax.annotation.Resource;
+import org.springframework.security.web.SecurityFilterChain;
 
 /**
  * @author ljy
- * @date 2023/2/3
  */
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-    @Resource
-    private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
-
-    @Resource
-    private AccessDeniedHandlerImpl accessDeniedHandler;
-
-    @Resource
-    private AuthenticationEntryPointImpl authenticationEntryPoint;
-
+@EnableWebSecurity
+public class SecurityConfig{
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                //关闭csrf
-                .csrf().disable()
-                //不通过Session获取SecurityContext
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
-                // 对于登录接口 允许匿名访问
-                .antMatchers("/user/login").anonymous()
-                // 除上面外的所有请求全部需要认证即可访问
-                .anyRequest().authenticated();
-
-        //配置异常处理器
-        http.exceptionHandling()
-                .accessDeniedHandler(accessDeniedHandler)
-                .authenticationEntryPoint(authenticationEntryPoint);
-        http.logout().disable();
-        http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
-        //允许跨域
-        http.cors();
-    }
-	
-    @Override
     @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                //设置路径可被任何人访问
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/login").permitAll()
+                //其他所有请求都需要经过身份验证
+                        .anyRequest().authenticated()
+                )
+                .formLogin(formLogin -> formLogin
+                //设置登录页面为
+                        .loginPage("/login")
+                )
+                //设置记住我功能
+                .rememberMe(Customizer.withDefaults());
+
+        return http.build();
     }
 }

@@ -1,6 +1,6 @@
-package com.sangeng.utils;
+package com.example.demo.utils;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.BoundSetOperations;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -10,9 +10,13 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Redis工具类
+ * @author ljy
+ */
 @SuppressWarnings(value = { "unchecked", "rawtypes" })
 @Component
-public class RedisCache
+public class RedisUtils
 {
     @Resource
     public RedisTemplate redisTemplate;

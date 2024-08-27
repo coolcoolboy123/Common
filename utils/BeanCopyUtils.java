@@ -5,6 +5,10 @@ import org.springframework.beans.BeanUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * BeanCopy工具类
+ * @author ljy
+ */
 public class BeanCopyUtils {
 
     private BeanCopyUtils() {

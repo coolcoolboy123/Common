@@ -1,4 +1,4 @@
-package com.sangeng.config;
+package com.example.demo.config;
 
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
@@ -7,14 +7,14 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * mp分页配置
- * @author Summer
+ * @author ljy
  */
 @Configuration
-public class MbatisPlusConfig {
+public class MybatisPlusConfig {
 
     /**
      * 3.4.0之后版本
-     * @return
+     * @return mybatisPlusInterceptor
      */
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor(){
